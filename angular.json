@@ -27,7 +27,6 @@
           },
           "configurations": {
             "production": {
-              "outputMode": "server",
               "budgets": [
                 {
                   "type": "initial",
