@@ -19,7 +19,7 @@ import { DashboardEstadisticas } from '../../types/dashboard-estadisticas.interf
                 <i class="pi pi-box text-4xl text-primary"></i>
                 <div>
                   <p class="text-500 mb-1">Artefactos</p>
-                  <h2 class="mt-0 mb-0">{{ estadisticas?.cantidadArtefactos || 0 }}</h2>
+                  <h2 class="mt-0 mb-0">{{ estadisticas?.cantidadArtefactos }}</h2>
                 </div>
               </div>
             </p-card>
@@ -31,7 +31,7 @@ import { DashboardEstadisticas } from '../../types/dashboard-estadisticas.interf
                 <i class="pi pi-file text-4xl text-primary"></i>
                 <div>
                   <p class="text-500 mb-1">Entregables</p>
-                  <h2 class="mt-0 mb-0">{{ estadisticas?.cantidadEntregables || 0 }}</h2>
+                  <h2 class="mt-0 mb-0">{{ estadisticas?.cantidadEntregables  }}</h2>
                 </div>
               </div>
             </p-card>
@@ -43,7 +43,7 @@ import { DashboardEstadisticas } from '../../types/dashboard-estadisticas.interf
                 <i class="pi pi-server text-4xl text-primary"></i>
                 <div>
                   <p class="text-500 mb-1">Instancias</p>
-                  <h2 class="mt-0 mb-0">{{ estadisticas?.cantidadInstancias || 0 }}</h2>
+                  <h2 class="mt-0 mb-0">{{ estadisticas?.cantidadInstancias }}</h2>
                 </div>
               </div>
             </p-card>

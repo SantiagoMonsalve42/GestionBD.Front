@@ -8,7 +8,7 @@ import { LoadingService } from '../../services/loading.service';
   standalone: true,
   imports: [CommonModule, ProgressSpinnerModule],
   template: `
-    @if (loadingService.isLoading()) {
+    @if (isLoading$ | async) {
       <div class="loading-overlay">
         <p-progressSpinner
           styleClass="spinner"
@@ -39,5 +39,6 @@ import { LoadingService } from '../../services/loading.service';
   `]
 })
 export class LoadingComponent {
-  loadingService = inject(LoadingService);
+  private loadingService = inject(LoadingService);
+  isLoading$ = this.loadingService.isLoading$;
 }
