@@ -3,19 +3,19 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'publico',
+    redirectTo: 'public',
     pathMatch: 'full'
   },
   {
-    path: 'publico',
+    path: 'public',
     loadChildren: () => import('./features/publico/publico.routes').then(m => m.PUBLICO_ROUTES)
   },
   {
-    path: 'privado',
+    path: 'core',
     loadChildren: () => import('./features/privado/privado.routes').then(m => m.PRIVADO_ROUTES)
   },
   {
     path: '**',
-    redirectTo: 'publico'
+    redirectTo: 'public'
   }
 ];
