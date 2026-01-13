@@ -4,10 +4,11 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { TagModule } from 'primeng/tag';
+import { FooterComponent } from './shared/components/footer/footer.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ButtonModule, CardModule, InputTextModule, TagModule],
+  imports: [RouterOutlet, ButtonModule, CardModule, InputTextModule, TagModule, FooterComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
