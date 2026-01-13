@@ -35,9 +35,10 @@ import { ButtonModule } from 'primeng/button';
           </div>
         </div>
       </div>
-           
       <div class="footer-bottom">
         <p><i class="pi pi-copyright"></i> {{ currentYear }} GestionBD. Todos los derechos reservados.</p>
+        <br>
+        <p><i class="pi pi-copyright"></i> Universidad Antonio Nariño - Facultad de ingenieria de sistemas</p>
       </div>
     </footer>
   `,
