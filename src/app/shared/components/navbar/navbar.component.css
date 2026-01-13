@@ -1,0 +1,40 @@
+.navbar-container {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+::ng-deep .p-menubar .p-menuitem-icon,
+::ng-deep .p-avatar .pi {
+  color: #ffff !important;
+}
+
+::ng-deep .pi-database {
+  color: #ffff !important;
+}
+
+::ng-deep .custom-menubar {
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid #15171a;
+  padding: 0.5rem 2rem;
+}
+
+.search-input {
+  width: 250px;
+}
+
+@media (max-width: 960px) {
+  ::ng-deep .custom-menubar {
+    padding: 0.5rem 1rem;
+  }
+
+  .search-input {
+    width: 150px;
+  }
+}
+.p-menubar{
+    border-radius: 0%;
+}

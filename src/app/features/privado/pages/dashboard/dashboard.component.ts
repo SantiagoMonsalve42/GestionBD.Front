@@ -1,88 +1,71 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, CardModule],
   template: `
-    <div class="dashboard-container">
-      <h1>Dashboard - Área Privada</h1>
-      <p>Este es un componente de ejemplo del feature privado</p>
-      <div class="stats-grid">
-        <div class="stat-card">
-          <h3>Usuarios</h3>
-          <p class="stat-number">150</p>
+    <div class="dashboard-content">
+      <h1 class="mb-4">Bienvenido al Dashboard</h1>
+      
+      <div class="grid">
+        <div class="col-12 md:col-6 lg:col-3">
+          <p-card>
+            <div class="flex align-items-center gap-3">
+              <i class="pi pi-users text-4xl text-primary"></i>
+              <div>
+                <p class="text-500 mb-1">Usuarios</p>
+                <h2 class="mt-0 mb-0">150</h2>
+              </div>
+            </div>
+          </p-card>
         </div>
-        <div class="stat-card">
-          <h3>Proyectos</h3>
-          <p class="stat-number">45</p>
+        
+        <div class="col-12 md:col-6 lg:col-3">
+          <p-card>
+            <div class="flex align-items-center gap-3">
+              <i class="pi pi-folder text-4xl text-primary"></i>
+              <div>
+                <p class="text-500 mb-1">Proyectos</p>
+                <h2 class="mt-0 mb-0">45</h2>
+              </div>
+            </div>
+          </p-card>
         </div>
-        <div class="stat-card">
-          <h3>Tareas</h3>
-          <p class="stat-number">320</p>
+        
+        <div class="col-12 md:col-6 lg:col-3">
+          <p-card>
+            <div class="flex align-items-center gap-3">
+              <i class="pi pi-file text-4xl text-primary"></i>
+              <div>
+                <p class="text-500 mb-1">Scripts</p>
+                <h2 class="mt-0 mb-0">320</h2>
+              </div>
+            </div>
+          </p-card>
         </div>
-      </div>
-      <div class="info-box">
-        <h2>Acceso Restringido</h2>
-        <p>Esta página requiere autenticación para ser accedida</p>
+        
+        <div class="col-12 md:col-6 lg:col-3">
+          <p-card>
+            <div class="flex align-items-center gap-3">
+              <i class="pi pi-server text-4xl text-primary"></i>
+              <div>
+                <p class="text-500 mb-1">Conexiones</p>
+                <h2 class="mt-0 mb-0">12</h2>
+              </div>
+            </div>
+          </p-card>
+        </div>
       </div>
     </div>
   `,
   styles: [`
-    .dashboard-container {
+    .dashboard-content {
       padding: 2rem;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
-    }
-
-    h1 {
-      color: #2c3e50;
-      margin-bottom: 1rem;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
-      margin: 2rem 0;
-    }
-
-    .stat-card {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 1.5rem;
-      border-radius: 8px;
-      text-align: center;
-    }
-
-    .stat-card h3 {
-      margin: 0 0 0.5rem 0;
-      font-size: 1rem;
-      opacity: 0.9;
-    }
-
-    .stat-number {
-      font-size: 2.5rem;
-      font-weight: bold;
-      margin: 0;
-    }
-
-    .info-box {
-      background-color: #fff3cd;
-      padding: 1.5rem;
-      border-radius: 8px;
-      margin-top: 1.5rem;
-      border-left: 4px solid #ffc107;
-    }
-
-    .info-box h2 {
-      color: #856404;
-      margin-bottom: 0.5rem;
-    }
-
-    .info-box p {
-      color: #856404;
     }
   `]
 })
