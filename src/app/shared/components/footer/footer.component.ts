@@ -21,7 +21,7 @@ import { ButtonModule } from 'primeng/button';
           <p><i class="pi pi-phone"></i> +57 (318) 329-7055</p>
         </div>
         
-        <div class="footer-section m-2">
+        <div class="footer-section">
           <h4>Redes Sociales</h4>
           <div class="social-links">
             <p-button 
@@ -43,7 +43,7 @@ import { ButtonModule } from 'primeng/button';
   `,
   styles: [`
     .footer {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg,#11998e 0%,#38ef7d 100%) !important;
       color: white;
       margin-top: auto;
       padding: 2rem;

@@ -13,3 +13,142 @@ html, body {
   font-family: 'Montserrat', sans-serif;
   overflow-x: hidden;
 }
+
+/* Global Button Styles */
+.btn-primary,
+.p-button {
+  padding: 1rem 3rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 50px !important;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before,
+.p-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+  z-index: 0;
+}
+
+.btn-primary:hover::before,
+.p-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn-primary:hover,
+.p-button:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary:active,
+.p-button:active {
+  transform: translateY(-1px);
+}
+
+.btn-primary .p-button-label,
+.btn-primary .p-button-icon,
+.p-button .p-button-label,
+.p-button .p-button-icon {
+  position: relative;
+  z-index: 1;
+}
+
+.p-button .p-button-icon {
+  transition: transform 0.3s ease;
+}
+
+.p-button:hover .p-button-icon {
+  transform: translateX(5px);
+}
+
+/* Botones redondeados más pequeños */
+.p-button.p-button-rounded {
+  padding: 0.5rem 0.75rem !important;
+  font-size: 1rem !important;
+  min-width: auto !important;
+}
+
+/* Variantes de botones */
+.p-button.p-button-success {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+}
+
+.p-button.p-button-danger {
+  background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%) !important;
+}
+
+.p-button.p-button-warning {
+  background: linear-gradient(135deg, #f39c12 0%, #f1c40f 100%) !important;
+}
+
+.p-button.p-button-info {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%) !important;
+}
+
+/* Botones de texto - mantienen el color pero sin fondo */
+.p-button.p-button-text {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0.5rem 1rem !important;
+}
+
+.p-button.p-button-text.p-button-success {
+  color: #11998e !important;
+}
+
+.p-button.p-button-text.p-button-danger {
+  color: #eb3349 !important;
+}
+
+.p-button.p-button-text.p-button-warning {
+  color: #f39c12 !important;
+}
+
+.p-button.p-button-text.p-button-info {
+  color: #3498db !important;
+}
+
+.p-button.p-button-text:hover {
+  transform: none !important;
+  background: rgba(102, 126, 234, 0.1) !important;
+}
+
+.p-button.p-button-text.p-button-success:hover {
+  background: rgba(17, 153, 142, 0.1) !important;
+}
+
+.p-button.p-button-text.p-button-danger:hover {
+  background: rgba(235, 51, 73, 0.1) !important;
+}
+
+.p-button.p-button-text.p-button-warning:hover {
+  background: rgba(243, 156, 18, 0.1) !important;
+}
+
+/* Botones deshabilitados */
+.p-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}

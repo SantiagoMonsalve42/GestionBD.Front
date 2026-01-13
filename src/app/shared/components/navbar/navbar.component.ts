@@ -38,7 +38,7 @@ export class NavbarComponent {
         icon: 'pi pi-cog',
         items: [
           {
-            label: 'Conexiones',
+            label: 'Instancias',
             icon: 'pi pi-server',
             command: () => this.router.navigate(['/core/connections'])
           }
