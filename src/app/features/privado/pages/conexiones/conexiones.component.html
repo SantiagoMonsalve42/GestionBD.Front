@@ -1,0 +1,195 @@
+<div class="conexiones-container">
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>
+
+  <p-card>
+    <ng-template pTemplate="header">
+      <div class="card-header">
+        <h2>Gestión de Conexiones</h2>
+        <p-button
+          label="Nueva Conexión"
+          icon="pi pi-plus"
+          (onClick)="openNew()"
+          styleClass="p-button-success">
+        </p-button>
+      </div>
+    </ng-template>
+
+    <p-table
+      [value]="instancias"
+      [tableStyle]="{ 'min-width': '60rem' }"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[5, 10, 20]">
+      
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Motor</th>
+          <th>Instancia</th>
+          <th>Puerto</th>
+          <th>Usuario</th>
+          <th>Base de Datos</th>
+          <th style="width: 200px">Acciones</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-instancia>
+        <tr>
+          <td>{{ getMotorNombre(instancia.idMotor) }}</td>
+          <td>{{ instancia.instancia }}</td>
+          <td>{{ instancia.puerto }}</td>
+          <td>{{ instancia.usuario }}</td>
+          <td>{{ instancia.nombreBD }}</td>
+          <td>
+            <p-button
+              icon="pi pi-pencil"
+              styleClass="p-button-rounded p-button-warning p-button-text"
+              (onClick)="editInstancia(instancia)"
+              pTooltip="Editar">
+            </p-button>
+            <p-button
+              icon="pi pi-trash"
+              styleClass="p-button-rounded p-button-danger p-button-text"
+              (onClick)="deleteInstancia(instancia)"
+              pTooltip="Eliminar">
+            </p-button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7" class="text-center">No hay conexiones registradas</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+
+  <!-- Dialog Form -->
+  <p-dialog
+    [(visible)]="displayDialog"
+    [header]="isEditMode ? 'Editar Conexión' : 'Nueva Conexión'"
+    [modal]="true"
+    [style]="{ width: '600px' }"
+    [closable]="true"
+    (onHide)="hideDialog()">
+    
+    <form [formGroup]="instanciaForm" class="form-grid">
+      <!-- Motor Dropdown -->
+      <div class="field">
+        <label for="idMotor">Motor de Base de Datos *</label>
+        <p-select
+          id="idMotor"
+          formControlName="idMotor"
+          [options]="motores"
+          optionLabel="nombreMotor"
+          optionValue="idMotor"
+          placeholder="Seleccione un motor"
+          [style]="{ width: '100%' }"
+          [showClear]="true">
+          <ng-template let-motor pTemplate="item">
+            <div>
+              <strong>{{ motor.nombreMotor }}</strong>
+              <div class="text-sm text-gray-500">{{ motor.descripcionMotor }}</div>
+            </div>
+          </ng-template>
+        </p-select>
+        <small class="p-error" *ngIf="instanciaForm.get('idMotor')?.invalid && instanciaForm.get('idMotor')?.touched">
+          Motor es requerido
+        </small>
+      </div>
+
+      <!-- Instancia -->
+      <div class="field">
+        <label for="instancia">Instancia *</label>
+        <input
+          id="instancia"
+          type="text"
+          pInputText
+          formControlName="instancia"
+          placeholder="Ej: localhost, 192.168.1.100"
+          [style]="{ width: '100%' }" />
+        <small class="p-error" *ngIf="instanciaForm.get('instancia')?.invalid && instanciaForm.get('instancia')?.touched">
+          Instancia es requerida (máx. 150 caracteres)
+        </small>
+      </div>
+
+      <!-- Puerto -->
+      <div class="field">
+        <label for="puerto">Puerto *</label>
+        <p-inputNumber
+          id="puerto"
+          formControlName="puerto"
+          [useGrouping]="false"
+          [min]="1"
+          [max]="65535"
+          placeholder="Ej: 1433, 3306, 5432"
+          [style]="{ width: '100%' }">
+        </p-inputNumber>
+        <small class="p-error" *ngIf="instanciaForm.get('puerto')?.invalid && instanciaForm.get('puerto')?.touched">
+          Puerto es requerido (entre 1 y 65535)
+        </small>
+      </div>
+
+      <!-- Usuario -->
+      <div class="field">
+        <label for="usuario">Usuario *</label>
+        <input
+          id="usuario"
+          type="text"
+          pInputText
+          formControlName="usuario"
+          placeholder="Nombre de usuario"
+          [style]="{ width: '100%' }" />
+        <small class="p-error" *ngIf="instanciaForm.get('usuario')?.invalid && instanciaForm.get('usuario')?.touched">
+          Usuario es requerido (máx. 150 caracteres)
+        </small>
+      </div>
+
+      <!-- Password -->
+      <div class="field">
+        <label for="password">Contraseña *</label>
+        <input
+          id="password"
+          type="password"
+          pInputText
+          formControlName="password"
+          placeholder="Contraseña"
+          [style]="{ width: '100%' }" />
+        <small class="p-error" *ngIf="instanciaForm.get('password')?.invalid && instanciaForm.get('password')?.touched">
+          Contraseña es requerida (máx. 150 caracteres)
+        </small>
+      </div>
+
+      <!-- Nombre BD -->
+      <div class="field">
+        <label for="nombreDB">Nombre de Base de Datos *</label>
+        <input
+          id="nombreBD"
+          type="text"
+          pInputText
+          formControlName="nombreBD"
+          placeholder="Nombre de la base de datos"
+          [style]="{ width: '100%' }" />
+        <small class="p-error" *ngIf="instanciaForm.get('nombreBD')?.invalid && instanciaForm.get('nombreBD')?.touched">
+          Nombre de BD es requerido (máx. 150 caracteres)
+        </small>
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <p-button
+        label="Cancelar"
+        icon="pi pi-times"
+        (onClick)="hideDialog()"
+        styleClass="p-button-text">
+      </p-button>
+      <p-button
+        label="Guardar"
+        icon="pi pi-check"
+        (onClick)="saveInstancia()"
+        [disabled]="instanciaForm.invalid">
+      </p-button>
+    </ng-template>
+  </p-dialog>
+</div>

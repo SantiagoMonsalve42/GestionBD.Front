@@ -27,14 +27,9 @@ export class NavbarComponent {
         icon: 'pi pi-folder',
         items: [
           {
-            label: 'Nuevo Proyecto',
-            icon: 'pi pi-plus',
-            command: () => console.log('Nuevo Proyecto')
-          },
-          {
-            label: 'Mis Proyectos',
+            label: 'Mis ejecuciones',
             icon: 'pi pi-list',
-            command: () => console.log('Mis Proyectos')
+            command: () => this.router.navigate(['/core/connections'])
           }
         ]
       },
@@ -45,7 +40,7 @@ export class NavbarComponent {
           {
             label: 'Conexiones',
             icon: 'pi pi-server',
-            command: () => console.log('Conexiones')
+            command: () => this.router.navigate(['/core/connections'])
           }
         ]
       },
@@ -53,7 +48,7 @@ export class NavbarComponent {
       {
         label: 'Cerrar Sesión',
         icon: 'pi pi-sign-out',
-        command: () => this.router.navigate(['/public/home'])
+        command: () => this.router.navigate(['/publico/home'])
       },
     ];
   }

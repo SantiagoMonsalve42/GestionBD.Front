@@ -13,6 +13,10 @@ export const PRIVADO_ROUTES: Routes = [
       {
         path: 'dashboard',
         loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent)
+      },
+      {
+        path: 'connections',
+        loadComponent: () => import('./pages/conexiones/conexiones.component').then(m => m.ConexionesComponent)
       }
     ]
   }
