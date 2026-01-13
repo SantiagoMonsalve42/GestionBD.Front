@@ -57,4 +57,7 @@ export class NavbarComponent {
       },
     ];
   }
+  redirectHome(): void{
+    this.router.navigate(['/core/dashboard']);
+  }
 }

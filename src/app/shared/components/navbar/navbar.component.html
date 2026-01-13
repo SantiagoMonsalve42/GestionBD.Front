@@ -1,7 +1,7 @@
 <div class="navbar-container">
   <p-menubar [model]="items">
     <ng-template pTemplate="start">
-      <div class="flex align-items-center gap-2">
+      <div class="flex align-items-center gap-2" (click)="redirectHome()">
         <i class="pi pi-database text-2xl text-primary"></i>
         <span class="font-bold text-xl">GestionBD</span>
       </div>
