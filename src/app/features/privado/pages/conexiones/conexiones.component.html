@@ -94,9 +94,11 @@
             </div>
           </ng-template>
         </p-select>
-        <small class="p-error" *ngIf="instanciaForm.get('idMotor')?.invalid && instanciaForm.get('idMotor')?.touched">
-          Motor es requerido
-        </small>
+        @if (instanciaForm.get('idMotor')?.invalid && instanciaForm.get('idMotor')?.touched) {
+          <small class="p-error">
+            Motor es requerido
+          </small>
+        }
       </div>
 
       <!-- Instancia -->
@@ -109,9 +111,11 @@
           formControlName="instancia"
           placeholder="Ej: localhost, 192.168.1.100"
           [style]="{ width: '100%' }" />
-        <small class="p-error" *ngIf="instanciaForm.get('instancia')?.invalid && instanciaForm.get('instancia')?.touched">
-          Instancia es requerida (máx. 150 caracteres)
-        </small>
+        @if (instanciaForm.get('instancia')?.invalid && instanciaForm.get('instancia')?.touched) {
+          <small class="p-error">
+            Instancia es requerida (máx. 150 caracteres)
+          </small>
+        }
       </div>
 
       <!-- Puerto -->
@@ -126,9 +130,11 @@
           placeholder="Ej: 1433, 3306, 5432"
           [style]="{ width: '100%' }">
         </p-inputNumber>
-        <small class="p-error" *ngIf="instanciaForm.get('puerto')?.invalid && instanciaForm.get('puerto')?.touched">
-          Puerto es requerido (entre 1 y 65535)
-        </small>
+        @if (instanciaForm.get('puerto')?.invalid && instanciaForm.get('puerto')?.touched) {
+          <small class="p-error">
+            Puerto es requerido (entre 1 y 65535)
+          </small>
+        }
       </div>
 
       <!-- Usuario -->
@@ -141,9 +147,11 @@
           formControlName="usuario"
           placeholder="Nombre de usuario"
           [style]="{ width: '100%' }" />
-        <small class="p-error" *ngIf="instanciaForm.get('usuario')?.invalid && instanciaForm.get('usuario')?.touched">
-          Usuario es requerido (máx. 150 caracteres)
-        </small>
+        @if (instanciaForm.get('usuario')?.invalid && instanciaForm.get('usuario')?.touched) {
+          <small class="p-error">
+            Usuario es requerido (máx. 150 caracteres)
+          </small>
+        }
       </div>
 
       <!-- Password -->
@@ -156,9 +164,11 @@
           formControlName="password"
           placeholder="Contraseña"
           [style]="{ width: '100%' }" />
-        <small class="p-error" *ngIf="instanciaForm.get('password')?.invalid && instanciaForm.get('password')?.touched">
-          Contraseña es requerida (máx. 150 caracteres)
-        </small>
+        @if (instanciaForm.get('password')?.invalid && instanciaForm.get('password')?.touched) {
+          <small class="p-error">
+            Contraseña es requerida (máx. 150 caracteres)
+          </small>
+        }
       </div>
 
       <!-- Nombre BD -->
@@ -171,9 +181,11 @@
           formControlName="nombreBD"
           placeholder="Nombre de la base de datos"
           [style]="{ width: '100%' }" />
-        <small class="p-error" *ngIf="instanciaForm.get('nombreBD')?.invalid && instanciaForm.get('nombreBD')?.touched">
-          Nombre de BD es requerido (máx. 150 caracteres)
-        </small>
+        @if (instanciaForm.get('nombreBD')?.invalid && instanciaForm.get('nombreBD')?.touched) {
+          <small class="p-error">
+            Nombre de BD es requerido (máx. 150 caracteres)
+          </small>
+        }
       </div>
     </form>
 

@@ -29,6 +29,11 @@ export class NavbarComponent {
           {
             label: 'Mis ejecuciones',
             icon: 'pi pi-list',
+            command: () => this.router.navigate(['/core/executions'])
+          },
+          {
+            label: 'Revisar ejecuciones',
+            icon: 'pi pi-check',
             command: () => this.router.navigate(['/core/connections'])
           }
         ]

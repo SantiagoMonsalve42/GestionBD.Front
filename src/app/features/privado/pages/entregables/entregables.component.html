@@ -1,0 +1,153 @@
+<div class="entregables-container">
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>
+
+  <p-card>
+    <ng-template pTemplate="header">
+      <div class="card-header">
+        <h2>Gestión de Ejecuciones</h2>
+        <p-button
+          label="Nueva Ejecución"
+          icon="pi pi-plus"
+          (onClick)="openNew()"
+          styleClass="p-button-success">
+        </p-button>
+      </div>
+    </ng-template>
+
+    <p-table
+      [value]="ejecuciones"
+      [tableStyle]="{ 'min-width': '60rem' }"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[5, 10, 20]">
+      
+      <ng-template pTemplate="header">
+        <tr>
+          <th>ID</th>
+          <th>Instancia</th>
+          <th>Requerimiento</th>
+          <th>Descripción</th>
+          <th style="width: 200px">Acciones</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-ejecucion>
+        <tr>
+          <td>{{ ejecucion.idEjecucion }}</td>
+          <td>{{ getInstanciaNombre(ejecucion.idInstancia) }}</td>
+          <td>{{ ejecucion.nombreRequerimiento }}</td>
+          <td>{{ ejecucion.descripcion }}</td>
+          <td>
+            <p-speedDial
+              [model]="getSpeedDialItems(ejecucion)"
+              direction="left"
+              [showIcon]="'pi pi-bars'"
+              [hideIcon]="'pi pi-times'"
+              buttonClassName="p-button-sm">
+            </p-speedDial>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5" class="text-center">No hay ejecuciones registradas</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+
+  <!-- Dialog Form -->
+  <p-dialog
+    [(visible)]="displayDialog"
+    [header]="isEditMode ? 'Editar Ejecución' : 'Nueva Ejecución'"
+    [modal]="true"
+    [style]="{ width: '600px' }"
+    [closable]="true"
+    (onHide)="hideDialog()">
+    
+    <form [formGroup]="ejecucionForm" class="form-grid">
+      <!-- Instancia Dropdown -->
+      <div class="field">
+        <label for="idInstancia">Instancia *</label>
+        <p-select
+          id="idInstancia"
+          formControlName="idInstancia"
+          [options]="instancias"
+          optionLabel="instancia"
+          optionValue="idInstancia"
+          placeholder="Seleccione una instancia"
+          [style]="{ width: '100%' }"
+          [showClear]="true">
+          <ng-template let-instancia pTemplate="item">
+            <div>
+              <strong>{{ instancia.instancia }}:{{ instancia.puerto }}</strong>
+              <div class="text-sm text-gray-500">DB: {{ instancia.nombreBD }} - Usuario: {{ instancia.usuario }}</div>
+            </div>
+          </ng-template>
+        </p-select>
+        @if (ejecucionForm.get('idInstancia')?.invalid && ejecucionForm.get('idInstancia')?.touched) {
+          <small class="p-error">
+            Instancia es requerida
+          </small>
+        }
+      </div>
+
+      <!-- Nombre Requerimiento -->
+      <div class="field">
+        <label for="nombreRequerimiento">Nombre del Requerimiento *</label>
+        <input
+          id="nombreRequerimiento"
+          type="text"
+          pInputText
+          formControlName="nombreRequerimiento"
+          placeholder="Ej: REQ-001, Sprint 5"
+          [style]="{ width: '100%' }" />
+        @if (ejecucionForm.get('nombreRequerimiento')?.invalid && ejecucionForm.get('nombreRequerimiento')?.touched) {
+          <small class="p-error">
+            Nombre del requerimiento es requerido (máx. 150 caracteres)
+          </small>
+        }
+        @if (isEditMode) {
+          <small class="p-info">
+            <i class="pi pi-info-circle"></i> Este campo no es editable
+          </small>
+        }
+      </div>
+
+      <!-- Descripción -->
+      <div class="field">
+        <label for="descripcion">Descripción *</label>
+        <textarea
+          id="descripcion"
+          pInputText
+          formControlName="descripcion"
+          placeholder="Descripción de la ejecución"
+          rows="4"
+          [style]="{ width: '100%', resize: 'vertical' }">
+        </textarea>
+        @if (ejecucionForm.get('descripcion')?.invalid && ejecucionForm.get('descripcion')?.touched) {
+          <small class="p-error">
+            Descripción es requerida (máx. 150 caracteres)
+          </small>
+        }
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <p-button
+        label="Cancelar"
+        icon="pi pi-times"
+        (onClick)="hideDialog()"
+        styleClass="p-button-text">
+      </p-button>
+      <p-button
+        label="Guardar"
+        icon="pi pi-check"
+        (onClick)="saveEjecucion()"
+        [disabled]="ejecucionForm.invalid">
+      </p-button>
+    </ng-template>
+  </p-dialog>
+</div>

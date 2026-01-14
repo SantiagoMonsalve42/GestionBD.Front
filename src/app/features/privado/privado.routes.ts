@@ -17,6 +17,10 @@ export const PRIVADO_ROUTES: Routes = [
       {
         path: 'connections',
         loadComponent: () => import('./pages/conexiones/conexiones.component').then(m => m.ConexionesComponent)
+      },
+      {
+        path: 'executions',
+        loadComponent: () => import('./pages/entregables/entregables.component').then(m => m.EntregablesComponent)
       }
     ]
   }

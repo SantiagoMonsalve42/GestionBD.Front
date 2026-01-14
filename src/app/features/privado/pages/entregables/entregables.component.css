@@ -1,0 +1,157 @@
+.entregables-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+}
+
+.card-header h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.form-grid {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.field label {
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.95rem;
+}
+
+.text-center {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.text-sm {
+  font-size: 0.85rem;
+}
+
+.text-gray-500 {
+  color: #6c757d;
+}
+
+.p-info {
+  color: #3498db;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+::ng-deep .p-datatable {
+  .p-datatable-thead > tr > th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: 600;
+    padding: 1rem;
+  }
+
+  .p-datatable-tbody > tr {
+    transition: all 0.2s;
+
+    &:hover {
+      background: #f8f9fa;
+    }
+  }
+
+  .p-datatable-tbody > tr > td {
+    padding: 1rem;
+  }
+}
+
+::ng-deep .p-speeddial {
+  .p-speeddial-button {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+    border: none !important;
+  }
+
+  .p-speeddial-action {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+    border: none !important;
+  }
+
+  .p-speeddial-button:hover,
+  .p-speeddial-action:hover {
+    background: linear-gradient(135deg, #0f8076 0%, #2dd467 100%) !important;
+  }
+}
+
+::ng-deep .p-dialog {
+  .p-dialog-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .p-dialog-content {
+    padding: 2rem;
+  }
+
+  .p-dialog-footer {
+    padding: 1.5rem;
+    border-top: 1px solid #dee2e6;
+  }
+}
+
+::ng-deep .p-inputtext,
+::ng-deep .p-select,
+::ng-deep textarea {
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0.75rem;
+  transition: all 0.3s;
+
+  &:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  }
+
+  &.ng-invalid.ng-touched {
+    border-color: #e74c3c;
+  }
+
+  &:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+}
+
+::ng-deep .p-error {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+::ng-deep .p-toast {
+  .p-toast-message {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
