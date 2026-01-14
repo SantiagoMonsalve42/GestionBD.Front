@@ -6,4 +6,6 @@ export interface Entregable {
   rutaEntregable: string;
   rutaDACPAC: string|null;
   temporalBD: string|null;
+  estadoEntrega: string,
+  estadoEntregaId: number
 }

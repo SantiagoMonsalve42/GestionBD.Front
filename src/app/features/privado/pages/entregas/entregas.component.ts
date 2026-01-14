@@ -14,7 +14,7 @@ import { FileUploadModule } from "primeng/fileupload";
 import { MessageService, ConfirmationService } from "primeng/api";
 import { EntregablesService } from "../../services/entregables.service";
 import { EjecucionesService } from "../../services/ejecuciones.service";
-import { Entregable } from "../../types/entregable.interface";
+import { Entregable } from '../../types/entregable.interface';
 import { Ejecucion } from "../../types/ejecucion.interface";
 
 @Component({
@@ -76,13 +76,6 @@ export class EntregasComponent implements OnInit {
     this.ejecucionesService.getEjecucionById(this.idEjecucion).subscribe({
       next: (data) => {
         this.ejecucion = data;
-      },
-      error: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error al cargar la ejecución'
-        });
       }
     });
   }
@@ -91,13 +84,6 @@ export class EntregasComponent implements OnInit {
     this.entregablesService.getEntregables(this.idEjecucion).subscribe({
       next: (data) => {
         this.entregables = data;
-      },
-      error: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Error al cargar los entregables'
-        });
       }
     });
   }
@@ -143,13 +129,6 @@ export class EntregasComponent implements OnInit {
                 detail: 'Entregable eliminado correctamente'
               });
               this.loadEntregables();
-            },
-            error: () => {
-              this.messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: 'Error al eliminar el entregable'
-              });
             }
           });
         }
@@ -177,13 +156,6 @@ export class EntregasComponent implements OnInit {
           });
           this.displayDialog = false;
           this.loadEntregables();
-        },
-        error: () => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Error al actualizar el entregable'
-          });
         }
       });
     } else {
@@ -205,13 +177,6 @@ export class EntregasComponent implements OnInit {
           });
           this.displayDialog = false;
           this.loadEntregables();
-        },
-        error: () => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Error al crear el entregable'
-          });
         }
       });
     }
@@ -273,5 +238,8 @@ export class EntregasComponent implements OnInit {
     this.displayDialog = false;
     this.entregableForm.reset();
     this.selectedFile = null;
+  }
+  redirectToArtifacts(entregable:Entregable){
+    console.log(entregable);
   }
 }

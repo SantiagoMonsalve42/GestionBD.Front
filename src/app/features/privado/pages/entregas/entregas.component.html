@@ -40,6 +40,7 @@
           <th>Ruta Entregable</th>
           <th>Ruta DACPAC</th>
           <th>Temporal BD</th>
+          <th>Estado Entrega</th>
           <th style="width: 200px">Acciones</th>
         </tr>
       </ng-template>
@@ -70,6 +71,19 @@
             }
           </td>
           <td>
+            @if (entregable.estadoEntrega) {
+              {{ entregable.estadoEntrega }}
+            } @else {
+              <span class="text-muted">N/A</span>
+            }
+          </td>
+          <td>
+            <p-button
+              icon="pi pi-eye"
+              styleClass="p-button-rounded p-button-success p-button-text"
+              (onClick)="redirectToArtifacts(entregable)"
+              pTooltip="Ver Artefactos">
+            </p-button>
             <p-button
               icon="pi pi-trash"
               styleClass="p-button-rounded p-button-danger p-button-text"
