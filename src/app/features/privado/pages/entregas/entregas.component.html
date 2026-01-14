@@ -1,0 +1,185 @@
+<div class="entregas-container">
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>
+
+  <p-card>
+    <ng-template pTemplate="header">
+      <div class="card-header">
+        <h2>Gestión de Entregables</h2>
+        @if (ejecucion) {
+          <div class="ejecucion-info">
+            <span><strong>Ejecución:</strong> {{ ejecucion.descripcion }}</span>
+            <span><strong>Requerimiento:</strong> {{ ejecucion.nombreRequerimiento }}</span>
+          </div>
+        }
+        <p-button
+          label="Nuevo Entregable"
+          icon="pi pi-plus"
+          (onClick)="openNew()"
+          styleClass="p-button-success">
+        </p-button>
+      </div>
+    </ng-template>
+
+    <p-table
+      [value]="entregables"
+      [tableStyle]="{ 'min-width': '60rem' }"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[5, 10, 20]">
+      
+      <ng-template pTemplate="header">
+        <tr>
+          <th>N° Entrega</th>
+          <th>Descripción</th>
+          <th>Ruta Entregable</th>
+          <th>Ruta DACPAC</th>
+          <th>Temporal BD</th>
+          <th style="width: 200px">Acciones</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-entregable>
+        <tr>
+          <td>{{ entregable.numeroEntrega }}</td>
+          <td>{{ entregable.descripcionEntregable }}</td>
+          <td>
+            <span class="ruta-text" [pTooltip]="entregable.rutaEntregable">
+              {{ entregable.rutaEntregable }}
+            </span>
+          </td>
+          <td>
+            @if (entregable.rutaDACPAC) {
+              <span class="ruta-text" [pTooltip]="entregable.rutaDACPAC">
+                {{ entregable.rutaDACPAC }}
+              </span>
+            } @else {
+              <span class="text-muted">N/A</span>
+            }
+          </td>
+          <td>
+            @if (entregable.temporalBD) {
+              {{ entregable.temporalBD }}
+            } @else {
+              <span class="text-muted">N/A</span>
+            }
+          </td>
+          <td>
+            <p-button
+              icon="pi pi-trash"
+              styleClass="p-button-rounded p-button-danger p-button-text"
+              (onClick)="deleteEntregable(entregable)"
+              pTooltip="Eliminar">
+            </p-button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7" class="text-center">No hay entregables registrados</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+
+  <!-- Dialog Form -->
+  <p-dialog
+    [(visible)]="displayDialog"
+    [header]="isEditMode ? 'Editar Entregable' : 'Nuevo Entregable'"
+    [modal]="true"
+    [style]="{ width: '600px' }"
+    [closable]="true"
+    (onHide)="hideDialog()">
+    
+    <form [formGroup]="entregableForm" class="form-grid">
+      
+      <!-- File Upload with Drag & Drop -->
+      @if (!isEditMode) {
+        <div class="field">
+          <label>Archivo .zip *</label>
+          <div 
+            class="file-upload-area"
+            [class.dragging]="isDragging"
+            (drop)="onFileDrop($event)"
+            (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave($event)">
+            
+            @if (!selectedFile) {
+              <div class="upload-content">
+                <i class="pi pi-cloud-upload" style="font-size: 3rem;"></i>
+                <p>Arrastra y suelta el archivo aquí</p>
+                <p>o</p>
+                <label for="fileInput" class="file-input-label">
+                  <i class="pi pi-folder-open"></i> Seleccionar archivo
+                </label>
+                <input
+                  type="file"
+                  id="fileInput"
+                  accept=".zip"
+                  (change)="onFileSelect($event)"
+                  style="display: none;">
+                <small class="help-text">Solo archivos .zip</small>
+              </div>
+            } @else {
+              <div class="file-selected">
+                <i class="pi pi-file-zip" style="font-size: 2rem; color: #4CAF50;"></i>
+                <div class="file-info">
+                  <strong>{{ selectedFile.name }}</strong>
+                  <small>{{ (selectedFile.size / 1024).toFixed(2) }} KB</small>
+                </div>
+                <p-button
+                  icon="pi pi-times"
+                  styleClass="p-button-rounded p-button-danger p-button-text"
+                  (onClick)="removeFile()"
+                  pTooltip="Remover archivo">
+                </p-button>
+              </div>
+            }
+          </div>
+          @if (entregableForm.get('file')?.invalid && entregableForm.get('file')?.touched) {
+            <small class="p-error">El archivo es requerido</small>
+          }
+        </div>
+      }
+
+      <!-- Description -->
+      <div class="field">
+        <label for="descripcionEntregable">Descripción *</label>
+        <input
+          id="descripcionEntregable"
+          type="text"
+          pInputText
+          formControlName="descripcionEntregable"
+          placeholder="Ingrese una descripción"
+          [class.ng-invalid]="entregableForm.get('descripcionEntregable')?.invalid && entregableForm.get('descripcionEntregable')?.touched"
+          [class.ng-dirty]="entregableForm.get('descripcionEntregable')?.touched" />
+        @if (entregableForm.get('descripcionEntregable')?.invalid && entregableForm.get('descripcionEntregable')?.touched) {
+          <small class="p-error">
+            @if (entregableForm.get('descripcionEntregable')?.errors?.['required']) {
+              La descripción es requerida
+            }
+            @if (entregableForm.get('descripcionEntregable')?.errors?.['maxlength']) {
+              La descripción no debe exceder 150 caracteres
+            }
+          </small>
+        }
+      </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+      <p-button
+        label="Cancelar"
+        icon="pi pi-times"
+        (onClick)="hideDialog()"
+        styleClass="p-button-text">
+      </p-button>
+      <p-button
+        label="Guardar"
+        icon="pi pi-check"
+        (onClick)="saveEntregable()"
+        [disabled]="entregableForm.invalid">
+      </p-button>
+    </ng-template>
+  </p-dialog>
+</div>

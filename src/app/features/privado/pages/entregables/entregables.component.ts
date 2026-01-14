@@ -105,7 +105,7 @@ export class EntregablesComponent implements OnInit {
     this.displayDialog = true;
   }
   redirectArtefactos(ejecucion: Ejecucion): void{
-    alert("to-do");
+    this.router.navigate(['executions/'+ejecucion.idEjecucion+'/deliverables'])
   }
   editEjecucion(ejecucion: Ejecucion): void {
     this.isEditMode = true;
