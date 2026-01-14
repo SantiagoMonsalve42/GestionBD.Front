@@ -13,7 +13,7 @@ export class EntregablesService {
   private httpClient = inject(HttpClient);
 
   getEntregables(idEjecucion: number): Observable<Entregable[]> {
-    return this.httpService.get<Entregable[]>(`${this.API_URL}/Entregables?idEjecucion=${idEjecucion}`);
+    return this.httpService.get<Entregable[]>(`${this.API_URL}/Entregables/Ejecucion/${idEjecucion}`);
   }
 
   getEntregableById(id: number): Observable<Entregable> {

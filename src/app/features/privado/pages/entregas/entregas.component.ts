@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnInit, inject } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { CardModule } from "primeng/card";
 import { TableModule } from "primeng/table";
 import { ButtonModule } from "primeng/button";
@@ -44,6 +44,7 @@ export class EntregasComponent implements OnInit {
   private ejecucionesService = inject(EjecucionesService);
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
+  private router = inject(Router);
 
   entregables: Entregable[] = [];
   ejecucion?: Ejecucion;
@@ -122,7 +123,9 @@ export class EntregasComponent implements OnInit {
     this.entregableForm.get('file')?.updateValueAndValidity();
     this.displayDialog = true;
   }
-
+  comeBack(): void{
+    this.router.navigate(['/core/executions']);
+  }
   deleteEntregable(entregable: Entregable): void {
     this.confirmationService.confirm({
       message: `¿Está seguro de eliminar el entregable?`,

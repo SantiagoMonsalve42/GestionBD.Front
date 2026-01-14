@@ -24,7 +24,6 @@
       
       <ng-template pTemplate="header">
         <tr>
-          <th>ID</th>
           <th>Instancia</th>
           <th>Requerimiento</th>
           <th>Descripción</th>
@@ -34,7 +33,6 @@
 
       <ng-template pTemplate="body" let-ejecucion>
         <tr>
-          <td>{{ ejecucion.idEjecucion }}</td>
           <td>{{ getInstanciaNombre(ejecucion.idInstancia) }}</td>
           <td>{{ ejecucion.nombreRequerimiento }}</td>
           <td>{{ ejecucion.descripcion }}</td>

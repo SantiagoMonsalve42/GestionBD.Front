@@ -1,7 +1,12 @@
 <div class="entregas-container">
   <p-toast></p-toast>
   <p-confirmDialog></p-confirmDialog>
-
+    <p-button
+          label="Regresar"
+          icon="pi pi-arrow-left"
+          (onClick)="comeBack()"
+          styleClass="p-button-success mb-2">
+    </p-button>
   <p-card>
     <ng-template pTemplate="header">
       <div class="card-header">
