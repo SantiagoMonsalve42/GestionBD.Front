@@ -8,3 +8,7 @@ export interface Artefacto {
   esReverso: boolean;
   descripcionEntregable: string;
 }
+export interface ArtefactoOrder{
+    idArtefacto: number;
+    ordenEjecucion: number;
+}

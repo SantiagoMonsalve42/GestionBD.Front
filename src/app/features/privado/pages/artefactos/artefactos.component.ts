@@ -10,9 +10,10 @@ import { TagModule } from "primeng/tag";
 import { MessageService } from "primeng/api";
 import { ArtefactosService } from "../../services/artefactos.service";
 import { EntregablesService } from "../../services/entregables.service";
-import { Artefacto } from "../../types/artefacto.interface";
+import { Artefacto, ArtefactoOrder } from '../../types/artefacto.interface';
 import { Entregable } from "../../types/entregable.interface";
 import { AppBackDirective } from "../../../../shared/directives/back.directive";
+import { EstadoEntregaEnum } from "../../../../shared/enum/estadoEntrega.enum";
 
 @Component({
   selector: 'app-artefactos',
@@ -68,7 +69,6 @@ export class ArtefactosComponent implements OnInit {
   loadArtefactos(): void {
     this.artefactosService.getArtefactosByEntregable(this.idEntregable).subscribe({
       next: (data) => {
-        // Sort by ordenEjecucion
         this.artefactos = data.sort((a, b) => a.ordenEjecucion - b.ordenEjecucion);
       },
       error: () => {
@@ -82,21 +82,48 @@ export class ArtefactosComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<Artefacto[]>): void {
-    if (event.previousIndex !== event.currentIndex) {
-      moveItemInArray(this.artefactos, event.previousIndex, event.currentIndex);
-      
-      // Update ordenEjecucion based on new positions
-      this.artefactos.forEach((artefacto, index) => {
-        artefacto.ordenEjecucion = index + 1;
-      });
-
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Orden actualizado',
-        detail: 'El orden de los artefactos ha sido modificado',
-        life: 3000
-      });
+    if(this.entregable?.estadoEntregaId == EstadoEntregaEnum.Creado){
+        if (event.previousIndex !== event.currentIndex) {
+            moveItemInArray(this.artefactos, event.previousIndex, event.currentIndex);
+            this.artefactos.forEach((artefacto, index) => {
+                artefacto.ordenEjecucion = index + 1;
+            });
+            this.changeOrder();
+        }    
+    }else{
+        this.messageService.add({
+                    severity: 'warn',
+                    summary: 'Orden no actualizado',
+                    detail: 'El orden de los artefactos solo puede ser modificado cuando esta la entrega esta en estado "Creado"',
+                    life: 3000
+                });
     }
+  }
+  getArtefactoOrder(): ArtefactoOrder[]{
+    var artefactosOrder : ArtefactoOrder[]=[];
+    this.artefactos.forEach(art=>{
+        artefactosOrder.push(
+                {
+                    idArtefacto:art.idArtefacto,
+                    ordenEjecucion:art.ordenEjecucion
+                });
+    });
+    return artefactosOrder;
+  }
+  changeOrder(): void{
+    this.artefactosService
+        .changeOrder(this.getArtefactoOrder())
+        .subscribe({
+            next: (_)=>{
+                this.loadArtefactos();
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Orden actualizado',
+                    detail: 'El orden de los artefactos ha sido modificado',
+                    life: 3000
+                });
+            }
+        });
   }
 
   getArtefactoIcon(codificacion: string): string {
