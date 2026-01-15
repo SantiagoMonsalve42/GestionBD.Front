@@ -78,18 +78,28 @@
             }
           </td>
           <td>
-            <p-button
-              icon="pi pi-play"
-              styleClass="p-button-rounded p-button-success p-button-text"
-              (onClick)="redirectToArtifacts(entregable)"
-              pTooltip="Ejecutar Artefactos">
-            </p-button>
-            <p-button
-              icon="pi pi-trash"
-              styleClass="p-button-rounded p-button-danger p-button-text"
-              (onClick)="deleteEntregable(entregable)"
-              pTooltip="Eliminar">
-            </p-button>
+            @if(estadoCerradoEnum != entregable.estadoEntregaId){
+                <p-button
+                    icon="pi pi-play"
+                    styleClass="p-button-rounded p-button-success p-button-text"
+                    (onClick)="redirectToArtifacts(entregable)"
+                    pTooltip="Ejecutar Artefactos">
+                </p-button>
+                <p-button
+                    icon="pi pi-trash"
+                    styleClass="p-button-rounded p-button-danger p-button-text"
+                    (onClick)="deleteEntregable(entregable)"
+                    pTooltip="Eliminar">
+                </p-button>
+            }@else{
+                <p-button
+                    icon="pi pi-eye"
+                    styleClass="p-button-rounded p-button-success p-button-text"
+                    pTooltip="Ver Artefactos">
+                </p-button>
+            }
+            
+            
           </td>
         </tr>
       </ng-template>

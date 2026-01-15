@@ -52,6 +52,7 @@ export class EntregablesComponent implements OnInit {
   isEditMode = false;
   ejecucionForm!: FormGroup;
   selectedEjecucionId?: number;
+  
 
   ngOnInit(): void {
     this.initForm();

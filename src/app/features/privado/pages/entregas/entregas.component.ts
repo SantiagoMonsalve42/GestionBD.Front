@@ -17,6 +17,7 @@ import { EjecucionesService } from "../../services/ejecuciones.service";
 import { Entregable } from '../../types/entregable.interface';
 import { Ejecucion } from "../../types/ejecucion.interface";
 import { AppBackDirective } from "../../../../shared/directives/back.directive";
+import { EstadoEntregaEnum } from "../../../../shared/enum/estadoEntrega.enum";
 
 @Component({
   selector: 'app-entregas',
@@ -47,7 +48,7 @@ export class EntregasComponent implements OnInit {
   private messageService = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
   private router = inject(Router);
-
+  estadoCerradoEnum = EstadoEntregaEnum.Cerrado;
   entregables: Entregable[] = [];
   ejecucion?: Ejecucion;
   idEjecucion!: number;
