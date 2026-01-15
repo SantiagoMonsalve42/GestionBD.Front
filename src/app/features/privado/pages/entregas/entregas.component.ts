@@ -16,6 +16,7 @@ import { EntregablesService } from "../../services/entregables.service";
 import { EjecucionesService } from "../../services/ejecuciones.service";
 import { Entregable } from '../../types/entregable.interface';
 import { Ejecucion } from "../../types/ejecucion.interface";
+import { AppBackDirective } from "../../../../shared/directives/back.directive";
 
 @Component({
   selector: 'app-entregas',
@@ -31,7 +32,8 @@ import { Ejecucion } from "../../types/ejecucion.interface";
     ToastModule,
     ConfirmDialogModule,
     TooltipModule,
-    FileUploadModule
+    FileUploadModule,
+    AppBackDirective
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './entregas.component.html',
@@ -240,6 +242,6 @@ export class EntregasComponent implements OnInit {
     this.selectedFile = null;
   }
   redirectToArtifacts(entregable:Entregable){
-    console.log(entregable);
+    this.router.navigate(["/core/deliverables/"+entregable.idEntregable+"/artifacts"]);
   }
 }

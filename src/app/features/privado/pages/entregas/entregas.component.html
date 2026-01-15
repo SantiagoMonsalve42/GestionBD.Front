@@ -4,7 +4,7 @@
     <p-button
           label="Regresar"
           icon="pi pi-arrow-left"
-          (onClick)="comeBack()"
+          appBack 
           styleClass="p-button-success mb-2">
     </p-button>
   <p-card>
@@ -79,10 +79,10 @@
           </td>
           <td>
             <p-button
-              icon="pi pi-eye"
+              icon="pi pi-play"
               styleClass="p-button-rounded p-button-success p-button-text"
               (onClick)="redirectToArtifacts(entregable)"
-              pTooltip="Ver Artefactos">
+              pTooltip="Ejecutar Artefactos">
             </p-button>
             <p-button
               icon="pi pi-trash"

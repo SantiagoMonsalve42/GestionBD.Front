@@ -1,0 +1,94 @@
+<div class="artefactos-container">
+  <p-toast></p-toast>
+  
+  <p-button
+    label="Regresar"
+    icon="pi pi-arrow-left"
+    appBack 
+    styleClass="p-button-success mb-2">
+  </p-button>
+
+  <div class="flex flex-wrap gap-3 mt-3">
+    <!-- Main Content: col-9 -->
+    <div class="flex-1" >
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="card-header">
+            <h2>Artefactos del Entregable</h2>
+            @if (entregable) {
+              <div class="entregable-info">
+                <span><strong>N° Entrega:</strong> {{ entregable.numeroEntrega }}</span>
+                <span><strong>Descripción:</strong> {{ entregable.descripcionEntregable }}</span>
+              </div>
+            }
+          </div>
+        </ng-template>
+
+        @if (artefactos.length === 0) {
+          <div class="empty-state">
+            <i class="pi pi-inbox" style="font-size: 3rem; color: #94a3b8;"></i>
+            <p>No hay artefactos para este entregable</p>
+          </div>
+        } @else {
+          <div class="artefactos-info">
+            <p-tag icon="pi pi-info-circle" severity="info" [value]="'Total: ' + artefactos.length + ' artefactos'"></p-tag>
+            <p-tag icon="pi pi-arrows-v" severity="secondary" value="Arrastra para reordenar"></p-tag>
+          </div>
+
+          <div 
+            cdkDropList 
+            class="artefactos-list"
+            (cdkDropListDropped)="drop($event)">
+            
+            @for (artefacto of artefactos; track artefacto.idArtefacto) {
+              <div class="artefacto-item" cdkDrag>
+                <div class="drag-handle" cdkDragHandle>
+                  <i class="pi pi-bars"></i>
+                </div>
+                
+                <div class="artefacto-order">
+                  <span class="order-badge">{{ artefacto.ordenEjecucion }}</span>
+                </div>
+
+                <div class="artefacto-icon">
+                  <i 
+                    class="pi" 
+                    [ngClass]="getArtefactoIcon(artefacto.codificacion)"
+                    [style.color]="getArtefactoColor(artefacto.codificacion)">
+                  </i>
+                </div>
+
+                <div class="artefacto-content">
+                  <div class="artefacto-header">
+                    <h4>{{ artefacto.nombreArtefacto }}</h4>
+                    @if (artefacto.esReverso) {
+                      <p-tag severity="danger" value="Reverso" icon="pi pi-undo"></p-tag>
+                    }
+                  </div>
+                  
+                </div>
+
+                <div class="cdk-drag-placeholder"></div>
+              </div>
+            }
+          </div>
+        }
+      </p-card>
+    </div>
+
+    <!-- Right Column: col-3 (Empty for future development) -->
+    <div class="flex-1">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="card-header">
+            <h3>Próximamente</h3>
+          </div>
+        </ng-template>
+        <div class="placeholder-content">
+          <i class="pi pi-cog" style="font-size: 2rem; color: #cbd5e0;"></i>
+          <p>Este espacio estará disponible para futuras funcionalidades</p>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</div>
