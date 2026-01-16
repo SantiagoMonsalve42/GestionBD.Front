@@ -1,5 +1,6 @@
 <div class="artefactos-container">
   <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>
   
   <p-button
     label="Regresar"
@@ -86,10 +87,23 @@
           </div>
         </ng-template>
         <div class="placeholder-content">
-            <p-button label="Preparacion ambiente" [disabled]="preparacionDisabled" styleClass="w-full" />
-            <p-button label="Pre-Despliegue" [disabled]="predespliegueDisabled" styleClass="w-full" />
-            <p-button label="Despliegue" [disabled]="despliegueDisabled" styleClass="w-full" />
-            <p-button label="Revisión" [disabled]="revisionDisabled" styleClass="w-full" />
+            <p-button label="Preparacion ambiente"
+                     [disabled]="preparacionDisabled" 
+                     styleClass="w-full"
+                     (click)="prepararAmbiente()" />
+            <p-button label="Pre-Despliegue" 
+                      [disabled]="predespliegueDisabled" 
+                      styleClass="w-full"
+                      (click)="preDeploy()" />
+            <p-button label="Despliegue" 
+                      [disabled]="despliegueDisabled" 
+                      styleClass="w-full"
+                      (click)="deploy()"
+                       />
+            <p-button label="Revisión" 
+                      [disabled]="revisionDisabled" 
+                      styleClass="w-full"
+                      (click)="revision()" />
         </div>
       </p-card>
     </div>

@@ -7,13 +7,15 @@ import { ButtonModule } from "primeng/button";
 import { ToastModule } from "primeng/toast";
 import { TooltipModule } from "primeng/tooltip";
 import { TagModule } from "primeng/tag";
-import { MessageService } from "primeng/api";
+import { ConfirmDialogModule } from "primeng/confirmdialog";
+import { MessageService, ConfirmationService } from "primeng/api";
 import { ArtefactosService } from "../../services/artefactos.service";
 import { EntregablesService } from "../../services/entregables.service";
 import { Artefacto, ArtefactoOrder } from '../../types/artefacto.interface';
 import { Entregable } from "../../types/entregable.interface";
 import { AppBackDirective } from "../../../../shared/directives/back.directive";
 import { EstadoEntregaEnum } from '../../../../shared/enum/estadoEntrega.enum';
+import { ProcesoService } from '../../services/proceso.service';
 
 @Component({
   selector: 'app-artefactos',
@@ -27,8 +29,9 @@ import { EstadoEntregaEnum } from '../../../../shared/enum/estadoEntrega.enum';
     TagModule,
     DragDropModule,
     AppBackDirective,
+    ConfirmDialogModule,
   ],
-  providers: [MessageService],
+  providers: [MessageService, ConfirmationService],
   templateUrl: './artefactos.component.html',
   styleUrl: './artefactos.component.css'
 })
@@ -37,7 +40,8 @@ export class ArtefactosComponent implements OnInit {
   private artefactosService = inject(ArtefactosService);
   private entregablesService = inject(EntregablesService);
   private messageService = inject(MessageService);
-
+  private procesoService = inject(ProcesoService);
+  private confirmationService = inject(ConfirmationService);
   preparacionDisabled:boolean=false;
   predespliegueDisabled:boolean=false;
   despliegueDisabled:boolean=false;
@@ -149,7 +153,8 @@ export class ArtefactosComponent implements OnInit {
   }
   validateEntregaStatus(): void{
     switch(this.entregable?.estadoEntregaId){
-        case (EstadoEntregaEnum.Cerrado || EstadoEntregaEnum.Revision):
+        case EstadoEntregaEnum.Cerrado:
+        case EstadoEntregaEnum.Revision:
             this.preparacionDisabled=true;
             this.predespliegueDisabled=true;
             this.despliegueDisabled=true;
@@ -180,5 +185,125 @@ export class ArtefactosComponent implements OnInit {
             this.revisionDisabled=true;
             break;
     }
+  }
+  prepararAmbiente():void{
+    this.confirmationService.confirm({
+      message: '¿Está seguro de que desea ejecutar esta acción?',
+      header: 'Confirmar Preparación de Ambiente',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
+      accept: () => {
+        this.procesoService
+          .prepararAmbiente(this.idEntregable)
+          .subscribe({
+            next: ()=>{
+              this.loadEntregable();
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Éxito',
+                detail: 'Preparación de ambiente ejecutada correctamente'
+              });
+            },
+            error: () => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Error al preparar el ambiente'
+              });
+            }
+          });
+      }
+    });
+  }
+  preDeploy():void{
+    this.confirmationService.confirm({
+      message: '¿Está seguro de que desea ejecutar esta acción?',
+      header: 'Confirmar Pre-Despliegue',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
+      accept: () => {
+        this.procesoService
+          .preDeploy(this.idEntregable)
+          .subscribe({
+            next: ()=>{
+              this.loadEntregable();
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Éxito',
+                detail: 'Pre-despliegue ejecutado correctamente'
+              });
+            },
+            error: () => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Error al ejecutar el pre-despliegue'
+              });
+            }
+          });
+      }
+    });
+  }
+  deploy():void{
+    this.confirmationService.confirm({
+      message: '¿Está seguro de que desea ejecutar esta acción?',
+      header: 'Confirmar Despliegue',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
+      accept: () => {
+        this.procesoService
+          .deploy(this.idEntregable)
+          .subscribe({
+            next: ()=>{
+              this.loadEntregable();
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Éxito',
+                detail: 'Despliegue ejecutado correctamente'
+              });
+            },
+            error: () => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Error al ejecutar el despliegue'
+              });
+            }
+          });
+      }
+    });
+  }
+  revision():void{
+    this.confirmationService.confirm({
+      message: '¿Está seguro de que desea ejecutar esta acción?',
+      header: 'Confirmar Envío a Revisión',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
+      accept: () => {
+        this.procesoService
+          .enviarRevision(this.idEntregable)
+          .subscribe({
+            next: ()=>{
+              this.loadEntregable();
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Éxito',
+                detail: 'Enviado a revisión correctamente'
+              });
+            },
+            error: () => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Error al enviar a revisión'
+              });
+            }
+          });
+      }
+    });
   }
 }
