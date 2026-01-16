@@ -82,12 +82,14 @@
       <p-card>
         <ng-template pTemplate="header">
           <div class="card-header">
-            <h3>Próximamente</h3>
+            <h3>Acciones</h3>
           </div>
         </ng-template>
         <div class="placeholder-content">
-          <i class="pi pi-cog" style="font-size: 2rem; color: #cbd5e0;"></i>
-          <p>Este espacio estará disponible para futuras funcionalidades</p>
+            <p-button label="Preparacion ambiente" [disabled]="preparacionDisabled" styleClass="w-full" />
+            <p-button label="Pre-Despliegue" [disabled]="predespliegueDisabled" styleClass="w-full" />
+            <p-button label="Despliegue" [disabled]="despliegueDisabled" styleClass="w-full" />
+            <p-button label="Revisión" [disabled]="revisionDisabled" styleClass="w-full" />
         </div>
       </p-card>
     </div>

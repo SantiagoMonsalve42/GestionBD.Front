@@ -13,7 +13,7 @@ import { EntregablesService } from "../../services/entregables.service";
 import { Artefacto, ArtefactoOrder } from '../../types/artefacto.interface';
 import { Entregable } from "../../types/entregable.interface";
 import { AppBackDirective } from "../../../../shared/directives/back.directive";
-import { EstadoEntregaEnum } from "../../../../shared/enum/estadoEntrega.enum";
+import { EstadoEntregaEnum } from '../../../../shared/enum/estadoEntrega.enum';
 
 @Component({
   selector: 'app-artefactos',
@@ -26,7 +26,7 @@ import { EstadoEntregaEnum } from "../../../../shared/enum/estadoEntrega.enum";
     TooltipModule,
     TagModule,
     DragDropModule,
-    AppBackDirective
+    AppBackDirective,
   ],
   providers: [MessageService],
   templateUrl: './artefactos.component.html',
@@ -37,6 +37,11 @@ export class ArtefactosComponent implements OnInit {
   private artefactosService = inject(ArtefactosService);
   private entregablesService = inject(EntregablesService);
   private messageService = inject(MessageService);
+
+  preparacionDisabled:boolean=false;
+  predespliegueDisabled:boolean=false;
+  despliegueDisabled:boolean=false;
+  revisionDisabled:boolean=false;
 
   artefactos: Artefacto[] = [];
   entregable?: Entregable;
@@ -55,6 +60,7 @@ export class ArtefactosComponent implements OnInit {
     this.entregablesService.getEntregableById(this.idEntregable).subscribe({
       next: (data) => {
         this.entregable = data;
+        this.validateEntregaStatus();
       },
       error: () => {
         this.messageService.add({
@@ -140,5 +146,39 @@ export class ArtefactosComponent implements OnInit {
     if (ext.includes('xml')) return '#FF9800';
     if (ext.includes('json')) return '#4CAF50';
     return '#607D8B';
+  }
+  validateEntregaStatus(): void{
+    switch(this.entregable?.estadoEntregaId){
+        case (EstadoEntregaEnum.Cerrado || EstadoEntregaEnum.Revision):
+            this.preparacionDisabled=true;
+            this.predespliegueDisabled=true;
+            this.despliegueDisabled=true;
+            this.revisionDisabled=true;
+            break;
+        case EstadoEntregaEnum.Despliegue:
+            this.preparacionDisabled=true;
+            this.predespliegueDisabled=true;
+            this.despliegueDisabled=true;
+            this.revisionDisabled=false;
+            break;
+        case EstadoEntregaEnum.PreDespliegue:
+            this.preparacionDisabled=true;
+            this.predespliegueDisabled=true;
+            this.despliegueDisabled=false;
+            this.revisionDisabled=true;
+            break;
+        case EstadoEntregaEnum.Creado:
+            this.preparacionDisabled=false;
+            this.predespliegueDisabled=true;
+            this.despliegueDisabled=true;
+            this.revisionDisabled=true;
+            break;
+        case EstadoEntregaEnum.Preparacion:
+            this.preparacionDisabled=true;
+            this.predespliegueDisabled=false;
+            this.despliegueDisabled=true;
+            this.revisionDisabled=true;
+            break;
+    }
   }
 }
