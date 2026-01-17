@@ -1,14 +1,15 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpService } from '../../../core/services/http.service';
+import { API_URL } from '../../../core/services/config.service';
 import { Instancia, Motor } from '../types/instancia.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InstanciasService {
-  private readonly API_URL = 'https://localhost:7133/api';
   private httpService = inject(HttpService);
+  private readonly API_URL = inject(API_URL);
 
   getInstancias(): Observable<Instancia[]> {
     return this.httpService.get<Instancia[]>(`${this.API_URL}/instancias`);

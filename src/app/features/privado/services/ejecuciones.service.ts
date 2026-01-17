@@ -1,14 +1,15 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpService } from '../../../core/services/http.service';
+import { API_URL } from '../../../core/services/config.service';
 import { Ejecucion } from '../types/ejecucion.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EjecucionesService {
-  private readonly API_URL = 'https://localhost:7133/api';
   private httpService = inject(HttpService);
+  private readonly API_URL = inject(API_URL);
 
   getEjecuciones(): Observable<Ejecucion[]> {
     return this.httpService.get<Ejecucion[]>(`${this.API_URL}/Ejecuciones`);

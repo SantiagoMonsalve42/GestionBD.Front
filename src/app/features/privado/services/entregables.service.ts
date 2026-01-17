@@ -3,14 +3,15 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Entregable } from '../types/entregable.interface';
 import { HttpService } from '../../../core/services/http.service';
+import { API_URL } from '../../../core/services/config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EntregablesService {
-  private readonly API_URL = 'https://localhost:7133/api';
   private httpService = inject(HttpService);
   private httpClient = inject(HttpClient);
+  private readonly API_URL = inject(API_URL);
 
   getEntregables(idEjecucion: number): Observable<Entregable[]> {
     return this.httpService.get<Entregable[]>(`${this.API_URL}/Entregables/Ejecucion/${idEjecucion}`);

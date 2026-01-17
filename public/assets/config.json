@@ -1,0 +1,8 @@
+{
+  "apiUrl": "https://localhost:7133/api",
+  "keycloak": {
+    "url": "http://keycloak:8080",
+    "realm": "my-app",
+    "clientId": "angular-app"
+  }
+}

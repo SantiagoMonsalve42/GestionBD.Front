@@ -1,13 +1,14 @@
 import { inject, Injectable } from "@angular/core";
 import { HttpService } from "../../../core/services/http.service";
+import { API_URL } from "../../../core/services/config.service";
 import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProcesoService {
-  private readonly API_URL = 'https://localhost:7133/api';
   private httpService = inject(HttpService);
+  private readonly API_URL = inject(API_URL);
 
   prepararAmbiente(idEntregable: number): Observable<any> {
     return this.httpService.post<any>(`${this.API_URL}/Proceso/first-step/${idEntregable}`,null);
