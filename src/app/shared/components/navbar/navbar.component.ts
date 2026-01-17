@@ -5,6 +5,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { MenuItem } from 'primeng/api';
 import { Router } from '@angular/router';
+import { SessionService } from '../../../core/services/session.service';
 
 @Component({
   selector: 'app-navbar',
@@ -16,6 +17,7 @@ import { Router } from '@angular/router';
 export class NavbarComponent {
   items: MenuItem[] = [];
   router: Router = inject(Router);
+  private sessionService = inject(SessionService);
   constructor() {
     this.initMenuItems();
   }
@@ -53,7 +55,9 @@ export class NavbarComponent {
       {
         label: 'Cerrar Sesión',
         icon: 'pi pi-sign-out',
-        command: () => this.router.navigate(['/publico/home'])
+        command: async () => {
+          await this.sessionService.logout();
+        }
       },
     ];
   }
