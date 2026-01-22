@@ -12,3 +12,11 @@ export interface ArtefactoOrder{
     idArtefacto: number;
     ordenEjecucion: number;
 }
+
+export interface ArtefactoPreDeployResponse{
+    isValid: boolean,
+    script: string,
+    status: string,
+    message: string,
+    additionalInfo: string
+}

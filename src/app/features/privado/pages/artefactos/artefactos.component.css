@@ -274,3 +274,66 @@
     align-items: flex-start;
   }
 }
+
+/* Pre-Deploy Modal Styles */
+::ng-deep .pre-deploy-dialog {
+  .p-dialog-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 8px 8px 0 0;
+  }
+
+  .p-dialog-content {
+    padding: 1.5rem;
+  }
+
+  .p-datatable {
+    font-size: 0.9rem;
+  }
+
+  .p-datatable-thead > tr > th {
+    background: #f8fafc;
+    color: #1e293b;
+    font-weight: 600;
+    padding: 1rem;
+    border-bottom: 2px solid #e2e8f0;
+  }
+
+  .p-datatable-tbody > tr {
+    transition: all 0.2s ease;
+  }
+
+  .p-datatable-tbody > tr:hover {
+    background: #f8fafc !important;
+  }
+
+  .p-datatable-tbody > tr > td {
+    padding: 1rem;
+    vertical-align: top;
+  }
+}
+
+.message-cell,
+.info-cell {
+  max-width: 300px;
+  word-wrap: break-word;
+  line-height: 1.5;
+  color: #475569;
+}
+
+.font-mono {
+  font-family: 'Courier New', Courier, monospace;
+  background: #f1f5f9;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  display: inline-block;
+  color: #0f172a;
+}
+
+.text-400 {
+  color: #94a3b8;
+}
+
+.text-500 {
+  color: #64748b;
+}

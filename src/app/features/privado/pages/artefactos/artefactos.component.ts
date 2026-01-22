@@ -8,10 +8,12 @@ import { ToastModule } from "primeng/toast";
 import { TooltipModule } from "primeng/tooltip";
 import { TagModule } from "primeng/tag";
 import { ConfirmDialogModule } from "primeng/confirmdialog";
+import { DialogModule } from "primeng/dialog";
+import { TableModule } from "primeng/table";
 import { MessageService, ConfirmationService } from "primeng/api";
 import { ArtefactosService } from "../../services/artefactos.service";
 import { EntregablesService } from "../../services/entregables.service";
-import { Artefacto, ArtefactoOrder } from '../../types/artefacto.interface';
+import { Artefacto, ArtefactoOrder, ArtefactoPreDeployResponse } from '../../types/artefacto.interface';
 import { Entregable } from "../../types/entregable.interface";
 import { AppBackDirective } from "../../../../shared/directives/back.directive";
 import { EstadoEntregaEnum } from '../../../../shared/enum/estadoEntrega.enum';
@@ -30,6 +32,8 @@ import { ProcesoService } from '../../services/proceso.service';
     DragDropModule,
     AppBackDirective,
     ConfirmDialogModule,
+    DialogModule,
+    TableModule,
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './artefactos.component.html',
@@ -51,6 +55,11 @@ export class ArtefactosComponent implements OnInit {
   entregable?: Entregable;
   idEntregable!: number;
   isDragging = false;
+
+  // Modal Pre-Deploy
+  displayPreDeployModal = false;
+  preDeployResults: ArtefactoPreDeployResponse[] = [];
+  rowsPerPage = 10;
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -227,13 +236,12 @@ export class ArtefactosComponent implements OnInit {
         this.procesoService
           .preDeploy(this.idEntregable)
           .subscribe({
-            next: ()=>{
+            next: (resp)=>{
+              if(resp.length > 0){
+                this.preDeployResults = resp;
+                this.displayPreDeployModal = true;
+              } 
               this.loadEntregable();
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Éxito',
-                detail: 'Pre-despliegue ejecutado correctamente'
-              });
             },
             error: () => {
               this.messageService.add({
@@ -245,6 +253,16 @@ export class ArtefactosComponent implements OnInit {
           });
       }
     });
+  }
+
+
+  getStatusIcon(isValid: boolean): string {
+    return isValid ? 'pi pi-check-circle' : 'pi pi-times-circle';
+  }
+
+  closePreDeployModal(): void {
+    this.displayPreDeployModal = false;
+    this.preDeployResults = [];
   }
   deploy():void{
     this.confirmationService.confirm({
