@@ -91,15 +91,22 @@
                      [disabled]="preparacionDisabled" 
                      styleClass="w-full"
                      (click)="prepararAmbiente()" />
+            <p-button label="Validar artefactos usando IA"
+                     [disabled]="artefactosDisabled" 
+                     styleClass="w-full"
+                     (click)="validacionArtefactos()" />
             <p-button label="Pre-Despliegue" 
                       [disabled]="predespliegueDisabled" 
                       styleClass="w-full"
                       (click)="preDeploy()" />
+            <p-button label="Generar Rollback Sugerido" 
+                      [disabled]="rollbackDisabled" 
+                      styleClass="w-full"
+                      (click)="rollback()" />
             <p-button label="Despliegue" 
                       [disabled]="despliegueDisabled" 
                       styleClass="w-full"
-                      (click)="deploy()"
-                       />
+                      (click)="deploy()" />
             <p-button label="Revisión" 
                       [disabled]="revisionDisabled" 
                       styleClass="w-full"
@@ -186,4 +193,185 @@
     </ng-template>
   </p-table>
 
+</p-dialog>
+
+<!-- Modal Validation Results -->
+<p-dialog 
+  [(visible)]="displayValidationModal" 
+  [modal]="true" 
+  [style]="{width: '95vw', height: '90vh'}"
+  [draggable]="false"
+  [resizable]="false"
+  styleClass="validation-dialog">
+  
+  <ng-template pTemplate="header">
+    <div class="flex align-items-center gap-2">
+      <i class="pi pi-shield text-3xl"></i>
+      <span class="font-bold text-xl">Validación de Artefactos SQL</span>
+    </div>
+  </ng-template>
+
+  <div class="validation-content">
+    <!-- Left Panel (30%) - Lista de artefactos -->
+    <div class="validation-list">
+      <div class="list-header">
+        <h3 class="m-0">Artefactos ({{ validationResults.length }})</h3>
+      </div>
+      <div class="list-items">
+        @for (validation of validationResults; track validation.name) {
+          <div 
+            class="list-item"
+            [class.selected]="selectedValidation?.name === validation.name"
+            (click)="selectValidation(validation)">
+            <div class="item-header">
+              <i class="pi" [ngClass]="getValidationIcon(validation)" 
+                 [class.text-success]="validation.sqlValidation.isValid && !validation.sqlValidation.hasWarnings"
+                 [class.text-warning]="validation.sqlValidation.hasWarnings"
+                 [class.text-danger]="validation.sqlValidation.hasErrors"></i>
+              <span class="item-name">{{ validation.name }}</span>
+            </div>
+            <div class="item-badges">
+              @if (validation.sqlValidation.hasErrors) {
+                <p-tag severity="danger" [value]="validation.sqlValidation.errors.length + ' errores'" size="small"></p-tag>
+              }
+              @if (validation.sqlValidation.hasWarnings) {
+                <p-tag severity="warn" [value]="validation.sqlValidation.warnings.length + ' warnings'" size="small"></p-tag>
+              }
+              @if (validation.sqlValidation.hasSuggestions) {
+                <p-tag severity="info" [value]="validation.sqlValidation.suggestions.length + ' sugerencias'" size="small"></p-tag>
+              }
+              @if (validation.sqlValidation.isValid && !validation.sqlValidation.hasWarnings) {
+                <p-tag severity="success" value="Válido" icon="pi pi-check" size="small"></p-tag>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Right Panel (70%) - Detalles del artefacto seleccionado -->
+    <div class="validation-details">
+      @if (selectedValidation) {
+        <div class="details-header">
+          <div class="flex align-items-center justify-content-between">
+            <h3 class="m-0">{{ selectedValidation.name }}</h3>
+            <p-tag 
+              [severity]="getValidationSeverity(selectedValidation)"
+              [value]="selectedValidation.sqlValidation.isValid ? 'Válido' : 'Inválido'"
+              [icon]="getValidationIcon(selectedValidation)"
+              >
+            </p-tag>
+          </div>
+        </div>
+
+        <div class="details-content">
+          <!-- Errores -->
+          @if (selectedValidation.sqlValidation.errors.length > 0) {
+            <div class="validation-section">
+              <div class="section-header error-header" (click)="toggleSection('errors')">
+                <div class="flex align-items-center gap-2">
+                  <i class="pi pi-times-circle text-danger text-xl"></i>
+                  <span class="font-semibold">Errores ({{ selectedValidation.sqlValidation.errors.length }})</span>
+                </div>
+                <i class="pi" [ngClass]="expandedSections['errors'] ? 'pi-chevron-down' : 'pi-chevron-right'"></i>
+              </div>
+              @if (expandedSections['errors']) {
+                <div class="section-content">
+                  <div class="issues-list">
+                    @for (error of selectedValidation.sqlValidation.errors; track error.code) {
+                      <div class="issue-item error-item">
+                        <div class="issue-code">
+                          <i class="pi pi-exclamation-circle"></i>
+                          <span>{{ error.code }}</span>
+                        </div>
+                        <p class="issue-message">{{ error.message }}</p>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Warnings -->
+          @if (selectedValidation.sqlValidation.warnings.length > 0) {
+            <div class="validation-section">
+              <div class="section-header warning-header" (click)="toggleSection('warnings')">
+                <div class="flex align-items-center gap-2">
+                  <i class="pi pi-exclamation-triangle text-warning text-xl"></i>
+                  <span class="font-semibold">Advertencias ({{ selectedValidation.sqlValidation.warnings.length }})</span>
+                </div>
+                <i class="pi" [ngClass]="expandedSections['warnings'] ? 'pi-chevron-down' : 'pi-chevron-right'"></i>
+              </div>
+              @if (expandedSections['warnings']) {
+                <div class="section-content">
+                  <div class="issues-list">
+                    @for (warning of selectedValidation.sqlValidation.warnings; track warning.code) {
+                      <div class="issue-item warning-item">
+                        <div class="issue-code">
+                          <i class="pi pi-exclamation-triangle"></i>
+                          <span>{{ warning.code }}</span>
+                        </div>
+                        <p class="issue-message">{{ warning.message }}</p>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Sugerencias -->
+          @if (selectedValidation.sqlValidation.suggestions.length > 0) {
+            <div class="validation-section">
+              <div class="section-header suggestion-header" (click)="toggleSection('suggestions')">
+                <div class="flex align-items-center gap-2">
+                  <i class="pi pi-lightbulb text-info text-xl"></i>
+                  <span class="font-semibold">Sugerencias ({{ selectedValidation.sqlValidation.suggestions.length }})</span>
+                </div>
+                <i class="pi" [ngClass]="expandedSections['suggestions'] ? 'pi-chevron-down' : 'pi-chevron-right'"></i>
+              </div>
+              @if (expandedSections['suggestions']) {
+                <div class="section-content">
+                  <div class="issues-list">
+                    @for (suggestion of selectedValidation.sqlValidation.suggestions; track suggestion.code) {
+                      <div class="issue-item suggestion-item">
+                        <div class="issue-code">
+                          <i class="pi pi-info-circle"></i>
+                          <span>{{ suggestion.code }}</span>
+                        </div>
+                        <p class="issue-message">{{ suggestion.message }}</p>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Estado válido sin problemas -->
+          @if (selectedValidation.sqlValidation.isValid && 
+                selectedValidation.sqlValidation.errors.length === 0 && 
+                selectedValidation.sqlValidation.warnings.length === 0 &&
+                selectedValidation.sqlValidation.suggestions.length === 0) {
+            <div class="no-issues">
+              <i class="pi pi-check-circle text-success" style="font-size: 4rem;"></i>
+              <h4>¡Artefacto válido!</h4>
+              <p>Este artefacto SQL no presenta errores, advertencias ni sugerencias.</p>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="no-selection">
+          <i class="pi pi-arrow-left" style="font-size: 3rem; color: #94a3b8;"></i>
+          <p>Selecciona un artefacto de la lista para ver sus detalles</p>
+        </div>
+      }
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-end gap-2">
+    </div>
+  </ng-template>
 </p-dialog>

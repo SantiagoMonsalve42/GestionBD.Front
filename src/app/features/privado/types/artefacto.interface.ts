@@ -20,3 +20,23 @@ export interface ArtefactoPreDeployResponse{
     message: string,
     additionalInfo: string
 }
+
+export interface ValidationIssue {
+  code: string;
+  message: string;
+}
+
+export interface SqlValidation {
+  isValid: boolean;
+  errors: ValidationIssue[];
+  warnings: ValidationIssue[];
+  suggestions: ValidationIssue[];
+  hasErrors: boolean;
+  hasWarnings: boolean;
+  hasSuggestions: boolean;
+}
+
+export interface ArtefactoValidationResponse {
+  name: string;
+  sqlValidation: SqlValidation;
+}

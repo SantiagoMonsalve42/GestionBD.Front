@@ -13,7 +13,7 @@ import { TableModule } from "primeng/table";
 import { MessageService, ConfirmationService } from "primeng/api";
 import { ArtefactosService } from "../../services/artefactos.service";
 import { EntregablesService } from "../../services/entregables.service";
-import { Artefacto, ArtefactoOrder, ArtefactoPreDeployResponse } from '../../types/artefacto.interface';
+import { Artefacto, ArtefactoOrder, ArtefactoPreDeployResponse, ArtefactoValidationResponse } from '../../types/artefacto.interface';
 import { Entregable } from "../../types/entregable.interface";
 import { AppBackDirective } from "../../../../shared/directives/back.directive";
 import { EstadoEntregaEnum } from '../../../../shared/enum/estadoEntrega.enum';
@@ -50,6 +50,8 @@ export class ArtefactosComponent implements OnInit {
   predespliegueDisabled:boolean=false;
   despliegueDisabled:boolean=false;
   revisionDisabled:boolean=false;
+  artefactosDisabled:boolean=false;
+  rollbackDisabled:boolean=false;
 
   artefactos: Artefacto[] = [];
   entregable?: Entregable;
@@ -60,6 +62,16 @@ export class ArtefactosComponent implements OnInit {
   displayPreDeployModal = false;
   preDeployResults: ArtefactoPreDeployResponse[] = [];
   rowsPerPage = 10;
+
+  // Modal Validation
+  displayValidationModal = false;
+  validationResults: ArtefactoValidationResponse[] = [];
+  selectedValidation?: ArtefactoValidationResponse;
+  expandedSections: { [key: string]: boolean } = {
+    errors: true,
+    warnings: false,
+    suggestions: false
+  };
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -168,30 +180,56 @@ export class ArtefactosComponent implements OnInit {
             this.predespliegueDisabled=true;
             this.despliegueDisabled=true;
             this.revisionDisabled=true;
+            this.rollbackDisabled= true;
+            this.artefactosDisabled=true;
             break;
         case EstadoEntregaEnum.Despliegue:
             this.preparacionDisabled=true;
             this.predespliegueDisabled=true;
             this.despliegueDisabled=true;
             this.revisionDisabled=false;
+            this.rollbackDisabled= true;
+            this.artefactosDisabled=true;
             break;
         case EstadoEntregaEnum.PreDespliegue:
             this.preparacionDisabled=true;
             this.predespliegueDisabled=true;
-            this.despliegueDisabled=false;
+            this.despliegueDisabled=true;
             this.revisionDisabled=true;
+            this.rollbackDisabled= false;
+            this.artefactosDisabled=true;
             break;
         case EstadoEntregaEnum.Creado:
             this.preparacionDisabled=false;
             this.predespliegueDisabled=true;
             this.despliegueDisabled=true;
             this.revisionDisabled=true;
+            this.rollbackDisabled= true;
+            this.artefactosDisabled=true;
             break;
         case EstadoEntregaEnum.Preparacion:
+            this.preparacionDisabled=true;
+            this.predespliegueDisabled=true;
+            this.despliegueDisabled=true;
+            this.revisionDisabled=true;
+            this.rollbackDisabled= true;
+            this.artefactosDisabled=false;
+            break;
+        case EstadoEntregaEnum.Analisis:
             this.preparacionDisabled=true;
             this.predespliegueDisabled=false;
             this.despliegueDisabled=true;
             this.revisionDisabled=true;
+            this.rollbackDisabled= true;
+            this.artefactosDisabled=true;
+            break;
+        case EstadoEntregaEnum.Rollback:
+            this.preparacionDisabled=true;
+            this.predespliegueDisabled=true;
+            this.despliegueDisabled=false;
+            this.revisionDisabled=true;
+            this.rollbackDisabled= true;
+            this.artefactosDisabled=true;
             break;
     }
   }
@@ -225,6 +263,76 @@ export class ArtefactosComponent implements OnInit {
       }
     });
   }
+  rollback(): void{
+    alert("todo");
+  }
+
+  validacionArtefactos(): void {
+    this.confirmationService.confirm({
+      message: '¿Está seguro de que desea validar los artefactos?',
+      header: 'Confirmar Validación de Artefactos',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sí',
+      rejectLabel: 'No',
+      accept: () => {
+        this.procesoService
+          .validarArtefactos(this.idEntregable)
+          .subscribe({
+            next: (resp) => {
+              if (resp.length > 0) {
+                this.validationResults = resp;
+                this.selectedValidation = resp[0];
+                this.displayValidationModal = true;
+              } else {
+                this.messageService.add({
+                  severity: 'info',
+                  summary: 'Sin resultados',
+                  detail: 'No hay validaciones para mostrar'
+                });
+              }
+              this.loadEntregable();
+            },
+            error: () => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Error al validar los artefactos'
+              });
+            }
+          });
+      }
+    });
+  }
+
+  selectValidation(validation: ArtefactoValidationResponse): void {
+    this.selectedValidation = validation;
+    // Reset expanded sections when selecting a new validation
+    this.expandedSections = {
+      errors: true,
+      warnings: false,
+      suggestions: false
+    };
+  }
+
+  toggleSection(section: string): void {
+    this.expandedSections[section] = !this.expandedSections[section];
+  }
+
+
+  getValidationSeverity(validation: ArtefactoValidationResponse): 'success' | 'info' | 'warn' | 'danger' | 'secondary' | 'contrast' {
+    if (validation.sqlValidation.hasErrors) return 'danger';
+    if (validation.sqlValidation.hasWarnings) return 'warn';
+    if (validation.sqlValidation.isValid) return 'success';
+    return 'info';
+  }
+
+  getValidationIcon(validation: ArtefactoValidationResponse): string {
+    if (validation.sqlValidation.hasErrors) return 'pi pi-times-circle';
+    if (validation.sqlValidation.hasWarnings) return 'pi pi-exclamation-triangle';
+    if (validation.sqlValidation.isValid) return 'pi pi-check-circle';
+    return 'pi-info-circle';
+  }
+
   preDeploy():void{
     this.confirmationService.confirm({
       message: '¿Está seguro de que desea ejecutar esta acción?',
