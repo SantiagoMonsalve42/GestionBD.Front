@@ -39,6 +39,7 @@
           <th>Descripción</th>
           <th>Ruta Entregable</th>
           <th>Ruta DACPAC</th>
+          <th>Ruta Resultado Despliegue</th>
           <th>Temporal BD</th>
           <th>Estado Entrega</th>
           <th style="width: 200px">Acciones</th>
@@ -64,8 +65,19 @@
             }
           </td>
           <td>
+            @if (entregable.rutaResultado) {
+              <span class="ruta-text" [pTooltip]="entregable.rutaResultado">
+                {{ entregable.rutaResultado }}
+              </span>
+            } @else {
+              <span class="text-muted">N/A</span>
+            }
+          </td>
+          <td>
             @if (entregable.temporalBD) {
-              {{ entregable.temporalBD }}
+              <span class="ruta-text" [pTooltip]="entregable.temporalBD">
+                {{ entregable.temporalBD }}
+              </span>
             } @else {
               <span class="text-muted">N/A</span>
             }
@@ -78,7 +90,7 @@
             }
           </td>
           <td>
-            @if(estadoCerradoEnum != entregable.estadoEntregaId){
+            @if(estadoCerradoEnum != entregable.estadoEntregaId && estadoRevisionEnum != entregable.estadoEntregaId){
                 <p-button
                     icon="pi pi-play"
                     styleClass="p-button-rounded p-button-success p-button-text"
@@ -90,12 +102,6 @@
                     styleClass="p-button-rounded p-button-danger p-button-text"
                     (onClick)="deleteEntregable(entregable)"
                     pTooltip="Eliminar">
-                </p-button>
-            }@else{
-                <p-button
-                    icon="pi pi-eye"
-                    styleClass="p-button-rounded p-button-success p-button-text"
-                    pTooltip="Ver Artefactos">
                 </p-button>
             }
             

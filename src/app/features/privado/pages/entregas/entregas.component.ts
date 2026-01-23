@@ -49,6 +49,7 @@ export class EntregasComponent implements OnInit {
   private confirmationService = inject(ConfirmationService);
   private router = inject(Router);
   estadoCerradoEnum = EstadoEntregaEnum.Cerrado;
+  estadoRevisionEnum = EstadoEntregaEnum.Revision;
   entregables: Entregable[] = [];
   ejecucion?: Ejecucion;
   idEjecucion!: number;

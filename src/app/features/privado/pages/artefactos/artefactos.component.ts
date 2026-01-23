@@ -275,12 +275,12 @@ export class ArtefactosComponent implements OnInit {
         this.procesoService
           .deploy(this.idEntregable)
           .subscribe({
-            next: ()=>{
+            next: (response)=>{
               this.loadEntregable();
               this.messageService.add({
                 severity: 'success',
                 summary: 'Éxito',
-                detail: 'Despliegue ejecutado correctamente'
+                detail: response.isValid
               });
             },
             error: () => {
